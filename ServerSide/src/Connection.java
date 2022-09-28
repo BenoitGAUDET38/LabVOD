@@ -1,3 +1,4 @@
+import CSV.CSVRegister;
 import exceptions.InvalidCredentialsException;
 import exceptions.SignInFailed;
 import interfaces.IVODService;
@@ -8,6 +9,7 @@ public class Connection {
     Array clientList;
 
     boolean signIn(String mail, String pwd) throws SignInFailed {
+        CSVRegister s = new CSVRegister();
         return false;
     }
 
