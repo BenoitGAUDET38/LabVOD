@@ -14,18 +14,19 @@ public class Connection extends UnicastRemoteObject implements IConnection {
     Array clientList;
     VODService vodService;
 
-    protected Connection(int port) throws RemoteException {
+    public Connection(int port) throws RemoteException {
         super(port);
         vodService = new VODService(10002);
     }
 
-    public boolean signIn(String mail, String pwd) throws SignInFailed {
+    public boolean signIn(String mail, String pwd) throws SignInFailed, RemoteException {
         System.out.println("Mail : " + mail + ", pwd : " + pwd);
         CSVRegister register = new CSVRegister();
+        System.out.println("test" + register.add(mail, pwd));
         return register.add(mail, pwd);
     }
 
-    public IVODService login(String mail, String pwd) throws InvalidCredentialsException {
+    public IVODService login(String mail, String pwd) throws InvalidCredentialsException, RemoteException {
 
 
         return (IVODService) vodService;

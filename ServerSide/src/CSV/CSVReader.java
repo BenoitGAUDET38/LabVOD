@@ -1,25 +1,33 @@
 package CSV;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class CSVReader {
-    FileWriter file = null;
+    final String fileName = "Credentials.csv";
+    FileWriter fileWriter;
 
-    CSVReader(){
-        try
-        {
-            file = new FileWriter("Credentials.csv");
-            file.close();
-        }
-        catch(Exception e)
-        {
-            e.printStackTrace();
+    CSVReader(){}
+
+    void addData(String text){
+        try {
+            new FileWriter(fileName, true).append(text).close();
+        }catch (IOException io){
+            io.printStackTrace();
         }
     }
 
-    Scanner getCSVText(){
-        return new Scanner((Readable) file);
+    Scanner readData(){
+        try{
+            return new Scanner(new File(fileName));
+        }catch (FileNotFoundException fnfe){
+            fnfe.printStackTrace();
+        }
+        return null;
     }
-
 }

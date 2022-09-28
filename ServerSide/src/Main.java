@@ -1,3 +1,4 @@
+import CSV.CSVRegister;
 import application.Connection;
 
 import java.rmi.RemoteException;
