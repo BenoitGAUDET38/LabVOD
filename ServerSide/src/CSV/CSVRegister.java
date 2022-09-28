@@ -19,4 +19,9 @@ public class CSVRegister extends CSVReader{
             e.printStackTrace();
         }
     }
+
+    public boolean add(CSVRegister register) {
+
+        return true;
+    }
 }
