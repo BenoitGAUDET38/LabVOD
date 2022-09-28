@@ -1,27 +1,18 @@
 package CSV;
 
 import java.io.*;
+import java.util.Scanner;
 
 public class CSVRegister extends CSVReader{
+
+
     public CSVRegister(){
-        FileWriter file = null;
-
-        try
-        {
-            file = new FileWriter("Credentials.csv");
-
-            file.append("test");
-
-            file.close();
-        }
-        catch(Exception e)
-        {
-            e.printStackTrace();
-        }
+        super();
     }
 
-    public boolean add(CSVRegister register) {
-
+    public boolean add(String mail, String pwd) {
+        Scanner credentials = getCSVText();
+        while (credentials.hasNext())
         return true;
     }
 }
