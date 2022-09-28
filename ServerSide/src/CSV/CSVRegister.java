@@ -12,7 +12,7 @@ public class CSVRegister extends CSVReader{
 
     public boolean add(String mail, String pwd) {
         Scanner credentials = getCSVText();
-        while (credentials.hasNext())
+        while (credentials.hasNext()){}
         return true;
     }
 }
