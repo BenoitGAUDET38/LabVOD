@@ -3,9 +3,7 @@ package application;
 import interfaces.IMovieDesc;
 
 import java.io.Serializable;
-import java.rmi.Remote;
 import java.rmi.RemoteException;
-import java.rmi.server.UnicastRemoteObject;
 
 public class MovieDesc implements IMovieDesc, Serializable {
     String movieName;

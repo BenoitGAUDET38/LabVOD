@@ -1,5 +1,11 @@
+import application.ClientBox;
+import application.MovieDesc;
+import exceptions.InvalidCredentialsException;
 import exceptions.SignInFailed;
+import interfaces.IClientBox;
 import interfaces.IConnection;
+import interfaces.IMovieDesc;
+import interfaces.IVODService;
 
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
@@ -14,7 +20,21 @@ public class Main {
 
             System.out.println("Sign in : " + c.signIn("thobil@mail.com", "132"));
 
-        } catch (RemoteException | NotBoundException | SignInFailed e) {
+            IVODService ivodService = c.login("thobil@mail.com", "132");
+            System.out.println("\nRécupération de toutes les desciptions :");
+            for (MovieDesc movieDesc : ivodService.viewCatalog()) {
+                System.out.println("-> name : " + movieDesc.getMovieName() +
+                                 "\n   isbn : " + movieDesc.getIsbn() +
+                                 "\n   syno : " + movieDesc.getSynopsis());
+            }
+
+            // on creer le stub de notre ClientBox
+            IClientBox iClientBox = (IClientBox) new ClientBox(30001);
+
+            System.out.println("On veut regarder titanic :");
+            ivodService.playMovie(ivodService.viewCatalog().get(0).getIsbn(), iClientBox);
+
+        } catch (RemoteException | NotBoundException | SignInFailed | InvalidCredentialsException e) {
             e.printStackTrace();
         }
     }
