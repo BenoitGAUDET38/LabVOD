@@ -13,12 +13,7 @@ public class CSVRegister extends CSVReader{
     }
 
     public boolean add(String mail, String pwd) {
-        Scanner credentials = readData();
-
-        while (credentials.hasNextLine()){
-            String scan = credentials.nextLine();
-            if(scan.equals(mail + " " + pwd)) return false;
-        }
+        if(isCSVContain(mail,pwd)) return false;
 
         addData(mail + SPACE + pwd + LINE);
         return true;

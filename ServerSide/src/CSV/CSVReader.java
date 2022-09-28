@@ -30,4 +30,14 @@ public class CSVReader {
         }
         return null;
     }
+
+    boolean isCSVContain(String mail, String pwd){
+        Scanner credentials = readData();
+
+        while (credentials.hasNextLine()){
+            if(credentials.nextLine().equals(mail + " " + pwd)) return true;
+        }
+
+        return false;
+    }
 }
