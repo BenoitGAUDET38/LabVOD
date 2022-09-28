@@ -1,6 +1,8 @@
+import application.ClientBox;
 import application.MovieDesc;
 import exceptions.InvalidCredentialsException;
 import exceptions.SignInFailed;
+import interfaces.IClientBox;
 import interfaces.IConnection;
 import interfaces.IMovieDesc;
 import interfaces.IVODService;
@@ -25,6 +27,12 @@ public class Main {
                                  "\n   isbn : " + movieDesc.getIsbn() +
                                  "\n   syno : " + movieDesc.getSynopsis());
             }
+
+            // on creer le stub de notre ClientBox
+            IClientBox iClientBox = (IClientBox) new ClientBox(30001);
+
+            System.out.println("On veut regarder titanic :");
+            ivodService.playMovie(ivodService.viewCatalog().get(0).getIsbn(), iClientBox);
 
         } catch (RemoteException | NotBoundException | SignInFailed | InvalidCredentialsException e) {
             e.printStackTrace();

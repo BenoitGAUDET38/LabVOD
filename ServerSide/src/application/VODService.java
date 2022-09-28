@@ -3,6 +3,7 @@ package application;
 import interfaces.IClientBox;
 import interfaces.IVODService;
 
+import java.nio.charset.StandardCharsets;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
@@ -22,16 +23,27 @@ public class VODService extends UnicastRemoteObject implements IVODService {
         movieDescList.add(new MovieDesc("Interstellar", "003", "Il est aspiré dans unn trou noir"));
 
         movieList = new ArrayList<>();
-        movieList.add(new Movie(movieDescList.get(0), 10, new Byte[]{}));
-        movieList.add(new Movie(movieDescList.get(1), 20, new Byte[]{}));
-        movieList.add(new Movie(movieDescList.get(2), 30, new Byte[]{}));
+        movieList.add(new Movie(movieDescList.get(0), 10, "Tututututuututututututuuuuuu tutuutu tu tutu. JACK RFESTE SUR CTETTE PORT !!! NON ROSE IL N'y A PLUS DE PALCE :(".getBytes(StandardCharsets.UTF_8)));
+        movieList.add(new Movie(movieDescList.get(1), 20, new byte[]{}));
+        movieList.add(new Movie(movieDescList.get(2), 30, new byte[]{}));
     }
 
     public List<MovieDesc> viewCatalog() {
         return movieDescList;
     }
 
-    public Bill playMovie(String isbn, IClientBox box) {
+    public Bill playMovie(String isbn, IClientBox box) throws RemoteException {
+        Movie movie = getMovieByIsbn(isbn);
+        if (movie != null)
+            box.stream(movie.getContent()   );
+        return null;
+    }
+
+    private Movie getMovieByIsbn(String isbn) throws RemoteException {
+        for (Movie movie : movieList) {
+            if (movie.getMovieDesc().getIsbn().equals(isbn))
+                return movie;
+        }
         return null;
     }
 }
