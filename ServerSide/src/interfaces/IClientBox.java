@@ -1,4 +1,4 @@
 package interfaces;
 
-public class IClientBox {
+public interface IClientBox {
 }
