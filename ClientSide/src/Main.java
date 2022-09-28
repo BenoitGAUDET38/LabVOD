@@ -12,7 +12,7 @@ public class Main {
             Registry reg = LocateRegistry.getRegistry("localhost",2001);
             IConnection c = (IConnection) reg.lookup("MyConnection");
 
-            System.out.println("Login : " + c.signIn("thobil@mail.com", "132"));
+            System.out.println("Sign in : " + c.signIn("thobil@mail.com", "132"));
 
         } catch (RemoteException | NotBoundException | SignInFailed e) {
             e.printStackTrace();

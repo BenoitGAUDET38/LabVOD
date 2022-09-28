@@ -20,7 +20,7 @@ public class Connection extends UnicastRemoteObject implements IConnection {
     public boolean signIn(String mail, String pwd) throws SignInFailed {
         System.out.println("Mail : " + mail + ", pwd : " + pwd);
         CSVRegister register = new CSVRegister();
-        return register.add(register);
+        return register.add(mail, pwd);
     }
 
     public IVODService login(String mail, String pwd) throws InvalidCredentialsException {
