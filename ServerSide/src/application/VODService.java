@@ -1,3 +1,5 @@
+package application;
+
 import interfaces.IClientBox;
 import interfaces.IVODService;
 
@@ -10,11 +12,11 @@ public class VODService extends UnicastRemoteObject implements IVODService {
         super(port);
     }
 
-    List<MovieDesc> viewCatalog() {
+    public List<MovieDesc> viewCatalog() {
         return null;
     }
 
-    Bill playMovie(String isbn, IClientBox box) {
+    public Bill playMovie(String isbn, IClientBox box) {
         return null;
     }
 }
