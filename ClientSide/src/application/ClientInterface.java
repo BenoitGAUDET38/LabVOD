@@ -10,50 +10,132 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.util.List;
 import java.util.Scanner;
 
 public class ClientInterface {
+    private int port;
+
+    public ClientInterface(int port) {
+        this.port = port;
+    }
+
     void start() throws Exception {
         Registry reg = LocateRegistry.getRegistry("localhost",2001);
         IConnection c = (IConnection) reg.lookup("MyConnection");
 
-        System.out.println("Sign in : " + c.signIn("thobil@mail.com", "132"));
+        IVODService ivodService = connectionChoice(c);
+        if (ivodService == null)
+            return;
 
-        IVODService ivodService = c.login("thobil@mail.com", "132");
-        System.out.println("\nRécupération de toutes les desciptions :");
-        for (MovieDesc movieDesc : ivodService.viewCatalog()) {
-            System.out.println("-> name : " + movieDesc.getMovieName() +
-                    "\n   isbn : " + movieDesc.getIsbn() +
-                    "\n   syno : " + movieDesc.getSynopsis());
-        }
-
-        // on creer le stub de notre ClientBox
-        IClientBox iClientBox = (IClientBox) new ClientBox(30001);
-
-        System.out.println("On veut regarder titanic :");
-        ivodService.playMovie(ivodService.viewCatalog().get(0).getIsbn(), iClientBox);
+        chooseMovie(ivodService);
     }
 
-    IVODService connectionChoice(IConnection c) throws SignInFailed, RemoteException {
+    IVODService connectionChoice(IConnection c) throws SignInFailed, RemoteException, InvalidCredentialsException {
         Scanner scanner = new Scanner(System.in);
         while (true) {
-            System.out.println("Tapez le numéro associé à votre choix :" +
+            System.out.println("Tapez le numéro associé à votre choix de connexion :" +
                     "\n 1 - Se connecter" +
-                    "\n 2 - S'incrire");
+                    "\n 2 - S'incrire" +
+                    "\n 3 - Quitter l'application");
 
             switch (scanner.nextLine()) {
-                case "1":
-                    signIn(c);
-                case "2":
-                    IVODService ivodService
-                default:
-                    System.out.println("ERREUR : Choix inexistant");
+                case "1" -> signIn(c);
+                case "2" -> {
+                    IVODService ivodService = login(c);
+                    if (ivodService != null)
+                        return ivodService;
+                }
+                case "3" -> {
+                    return null;
+                }
+                default -> System.out.println("ERREUR : Choix inexistant");
             }
         }
     }
 
-    void login(IConnection c) {
+    void chooseMovie(IVODService ivodService) throws RemoteException, InterruptedException {
+        Scanner scanner = new Scanner(System.in);
+        List<MovieDesc> catalog = ivodService.viewCatalog();
+        int nbMovies;
+        while (true) {
+            System.out.println("\nAffichage du choix des films :");
+            nbMovies = 0;
+            for (MovieDesc movieDesc : catalog) {
+                nbMovies++;
+                System.out.println(nbMovies + " -> name : " + movieDesc.getMovieName() +
+                        "\n     isbn : " + movieDesc.getIsbn() +
+                        "\n     syno : " + movieDesc.getSynopsis());
+            }
 
+            int choice = -1;
+            do {
+                System.out.println("Choisir un film à regarder ou quitter l'application avec 0 : ");
+                try {
+                    choice = Integer.parseInt(scanner.nextLine());
+                    if (choice < 0 || choice > nbMovies)
+                        System.out.println("Erreur : choix incorrect");
+                } catch (NumberFormatException numberFormatException) {
+                    System.out.println("Erreur : le choix n'est pas un numéro");
+                }
+            } while (choice < 0 || choice > nbMovies);
+
+            // On quitte l'application
+            if (choice == 0)
+                return;
+
+            watchMovie(ivodService, catalog.get(choice-1).getIsbn());
+        }
+    }
+
+    void watchMovie(IVODService ivodService, String movieIsbn) throws RemoteException, InterruptedException {
+        IClientBox clientBox = new ClientBox(port);
+        Bill bill = ivodService.playMovie(movieIsbn, clientBox);
+
+        while (clientBox.getIsStream()) {
+            // on attend jusqu'à que le film soit terminé
+            Thread.sleep(1000);
+        }
+
+        System.out.println("FILM TERMINE !");
+        System.out.println("Facture reçu de " + bill.outrageousPrice + " pour le film " + bill.movieName + "...");
+    }
+
+    IVODService login(IConnection c) throws InvalidCredentialsException, RemoteException {
+        Scanner scanner = new Scanner(System.in);
+        String mail;
+        String password;
+        boolean firstTry = true;
+        IVODService ivodService;
+
+        do {
+            if (!firstTry) {
+                boolean endChoice = false;
+                System.out.println("ERREUR : mail ou mot de passe incorrect");
+                while (!endChoice) {
+                    System.out.println("Vous souhaiter : " +
+                            "\n 1 - Ressaisir vos identifiants" +
+                            "\n 2 - Retourner au menu de connection");
+
+                    switch (scanner.nextLine()) {
+                        case "1" -> endChoice = true;
+                        case "2" -> {
+                            return null;
+                        }
+                        default -> System.out.println("ERREUR : Choix inexistant");
+                    }
+                }
+            }
+
+            firstTry = false;
+            System.out.println("Saisir un mail : ");
+            mail = scanner.nextLine();
+            System.out.println("Saisir le mot de passe : ");
+            password = scanner.next();
+        } while ((ivodService = c.login(mail, password)) == null);
+
+        System.out.println("Connexion réussite !");
+        return ivodService;
     }
 
     boolean signIn(IConnection c) throws SignInFailed, RemoteException {
@@ -65,20 +147,18 @@ public class ClientInterface {
         do {
             if (!firstTry) {
                 boolean endChoice = false;
-                System.out.println("ERREUR : mail ou mot de passe incorrect");
-                while (endChoice) {
+                System.out.println("ERREUR : mail déjà existant ou erroné");
+                while (!endChoice) {
                     System.out.println("Vous souhaiter : " +
                             "\n 1 - Ressaisir vos identifiants" +
                             "\n 2 - Retourner au menu de connection");
 
                     switch (scanner.nextLine()) {
-                        case "1":
-                            endChoice = true;
-                            break;
-                        case "2":
+                        case "1" -> endChoice = true;
+                        case "2" -> {
                             return false;
-                        default:
-                            System.out.println("ERREUR : Choix inexistant");
+                        }
+                        default -> System.out.println("ERREUR : Choix inexistant");
                     }
                 }
             }
