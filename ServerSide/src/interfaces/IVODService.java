@@ -1,6 +1,7 @@
 package interfaces;
 
 import application.Bill;
+import application.Movie;
 import application.MovieDesc;
 
 import java.rmi.Remote;

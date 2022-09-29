@@ -26,15 +26,16 @@ public class Connection extends UnicastRemoteObject implements IConnection {
         CSVRegister register = new CSVRegister();
         boolean r = register.add(mail, pwd);
         System.out.println("Compte créé : " + r);
-        return r;
+        if(!r) throw new SignInFailed();
+        return true;
     }
 
     public IVODService login(String mail, String pwd) throws RemoteException, InvalidCredentialsException{
         System.out.println("* Tentative de connexion de");
         System.out.println("Mail : " + mail + ", pwd : " + pwd);
-        boolean r =  new CSVLogin().canLogin(mail, pwd);
+        boolean r =  new CSVLogin().isCSVContain(mail);
         System.out.println("Compte connecté : " + r);
-
-        return r? vodService : null;
+        if(!r) throw new InvalidCredentialsException();
+        return vodService;
     }
 }
