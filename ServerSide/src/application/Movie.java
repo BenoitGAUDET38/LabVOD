@@ -1,5 +1,8 @@
 package application;
 
+import java.math.BigInteger;
+import java.rmi.RemoteException;
+
 public class Movie {
     private MovieDesc movieDesc;
     private float price;
@@ -21,5 +24,9 @@ public class Movie {
 
     public byte[][] getContent() {
         return content;
+    }
+
+    public Bill generateBill() throws RemoteException {
+        return new Bill(movieDesc.getMovieName(), price);
     }
 }

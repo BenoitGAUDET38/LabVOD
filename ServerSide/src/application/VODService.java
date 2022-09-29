@@ -40,20 +40,32 @@ public class VODService extends UnicastRemoteObject implements IVODService {
 
     public Bill playMovie(String isbn, IClientBox box) throws RemoteException {
         Movie movie = getMovieByIsbn(isbn);
-        if (movie != null) {
-            for (byte[] bloc : movie.getContent()) {
-                box.stream(bloc);
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        return null;
+        // gestion cas d'erreur
+        if (movie == null)
+            return null;
+        readMovieInThread(movie, box);
+
+        return movie.generateBill();
     }
 
-    private Movie getMovieByIsbn(String isbn) throws RemoteException {
+    void readMovieInThread(Movie movie, IClientBox box) {
+        Thread thread = new Thread(){
+            @Override
+            public void run() {
+                for (byte[] bloc : movie.getContent()) {
+                    try {
+                        box.stream(bloc);
+                        Thread.sleep(2000);
+                    } catch (InterruptedException | RemoteException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        };
+        thread.start();
+    }
+
+    Movie getMovieByIsbn(String isbn) throws RemoteException {
         for (Movie movie : movieList) {
             if (movie.getMovieDesc().getIsbn().equals(isbn))
                 return movie;

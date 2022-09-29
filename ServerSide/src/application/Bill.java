@@ -4,5 +4,10 @@ import java.math.BigInteger;
 
 public class Bill {
     String movieName;
-    BigInteger outrageousPrice;
+    float outrageousPrice;
+
+    public Bill(String movieName, float outrageousPrice) {
+        this.movieName = movieName;
+        this.outrageousPrice = outrageousPrice;
+    }
 }
