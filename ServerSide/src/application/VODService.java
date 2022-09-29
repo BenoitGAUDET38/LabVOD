@@ -23,9 +23,15 @@ public class VODService extends UnicastRemoteObject implements IVODService {
         movieDescList.add(new MovieDesc("Interstellar", "003", "Il est aspiré dans unn trou noir"));
 
         movieList = new ArrayList<>();
-        movieList.add(new Movie(movieDescList.get(0), 10, "Tututututuututututututuuuuuu tutuutu tu tutu. JACK RFESTE SUR CTETTE PORT !!! NON ROSE IL N'y A PLUS DE PALCE :(".getBytes(StandardCharsets.UTF_8)));
-        movieList.add(new Movie(movieDescList.get(1), 20, new byte[]{}));
-        movieList.add(new Movie(movieDescList.get(2), 30, new byte[]{}));
+        movieList.add(new Movie(movieDescList.get(0), 10, new byte[][] {"first bloc of titanic".getBytes(StandardCharsets.UTF_8),
+                "second bloc of titanic".getBytes(StandardCharsets.UTF_8),
+                "third bloc of titanic".getBytes(StandardCharsets.UTF_8)}));
+        movieList.add(new Movie(movieDescList.get(1), 20, new byte[][] {"first bloc of Sharknado".getBytes(StandardCharsets.UTF_8),
+                "second bloc of Sharknado".getBytes(StandardCharsets.UTF_8),
+                "third bloc of Sharknado".getBytes(StandardCharsets.UTF_8)}));
+        movieList.add(new Movie(movieDescList.get(2), 30, new byte[][] {"first bloc of Interstellar".getBytes(StandardCharsets.UTF_8),
+                "second bloc of Interstellar".getBytes(StandardCharsets.UTF_8),
+                "third bloc of Interstellar".getBytes(StandardCharsets.UTF_8)}));
     }
 
     public List<MovieDesc> viewCatalog() {
@@ -34,8 +40,16 @@ public class VODService extends UnicastRemoteObject implements IVODService {
 
     public Bill playMovie(String isbn, IClientBox box) throws RemoteException {
         Movie movie = getMovieByIsbn(isbn);
-        if (movie != null)
-            box.stream(movie.getContent()   );
+        if (movie != null) {
+            for (byte[] bloc : movie.getContent()) {
+                box.stream(bloc);
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
         return null;
     }
 

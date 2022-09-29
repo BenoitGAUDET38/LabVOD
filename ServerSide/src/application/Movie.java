@@ -3,9 +3,9 @@ package application;
 public class Movie {
     private MovieDesc movieDesc;
     private float price;
-    private byte[] content;
+    private byte[][] content;
 
-    public Movie(MovieDesc movieDesc, float price, byte[] content) {
+    public Movie(MovieDesc movieDesc, float price, byte[][] content) {
         this.movieDesc = movieDesc;
         this.price = price;
         this.content = content;
@@ -19,7 +19,7 @@ public class Movie {
         return price;
     }
 
-    public byte[] getContent() {
+    public byte[][] getContent() {
         return content;
     }
 }
