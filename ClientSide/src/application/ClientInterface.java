@@ -20,7 +20,7 @@ public class ClientInterface {
         this.port = port;
     }
 
-    void start() throws Exception {
+    public void start() throws Exception {
         Registry reg = LocateRegistry.getRegistry("localhost",2001);
         IConnection c = (IConnection) reg.lookup("MyConnection");
 
@@ -40,12 +40,12 @@ public class ClientInterface {
                     "\n 3 - Quitter l'application");
 
             switch (scanner.nextLine()) {
-                case "1" -> signIn(c);
-                case "2" -> {
+                case "1" -> {
                     IVODService ivodService = login(c);
                     if (ivodService != null)
                         return ivodService;
                 }
+                case "2" -> signIn(c);
                 case "3" -> {
                     return null;
                 }
@@ -98,7 +98,7 @@ public class ClientInterface {
         }
 
         System.out.println("FILM TERMINE !");
-        System.out.println("Facture reçu de " + bill.outrageousPrice + " pour le film " + bill.movieName + "...");
+        System.out.println("Facture reçu de " + bill.outrageousPrice + "€ pour le film " + bill.movieName + "...");
     }
 
     IVODService login(IConnection c) throws InvalidCredentialsException, RemoteException {

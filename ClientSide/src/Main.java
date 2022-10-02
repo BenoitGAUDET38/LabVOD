@@ -1,4 +1,5 @@
 import application.ClientBox;
+import application.ClientInterface;
 import application.MovieDesc;
 import exceptions.InvalidCredentialsException;
 import exceptions.SignInFailed;
@@ -20,6 +21,7 @@ public class Main {
 
     public static void main(String[] args) {
         try {
+            /*
             Registry reg = LocateRegistry.getRegistry("localhost",2001);
             c = (IConnection) reg.lookup("MyConnection");
 
@@ -39,8 +41,11 @@ public class Main {
             showMovieList();
 
             chooseMovie();
+             */
+            ClientInterface clientInterface = new ClientInterface(20001);
+            clientInterface.start();
 
-        } catch (RemoteException | NotBoundException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

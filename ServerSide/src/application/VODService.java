@@ -52,13 +52,15 @@ public class VODService extends UnicastRemoteObject implements IVODService {
         Thread thread = new Thread(){
             @Override
             public void run() {
-                for (byte[] bloc : movie.getContent()) {
-                    try {
-                        box.stream(bloc);
-                        Thread.sleep(2000);
-                    } catch (InterruptedException | RemoteException e) {
-                        e.printStackTrace();
+                try {
+                    box.setIsStream(true);
+                    for (byte[] bloc : movie.getContent()) {
+                            box.stream(bloc);
+                            Thread.sleep(2000);
                     }
+                    box.setIsStream(false);
+                } catch (InterruptedException | RemoteException e) {
+                    e.printStackTrace();
                 }
             }
         };
