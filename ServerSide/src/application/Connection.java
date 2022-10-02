@@ -48,6 +48,14 @@ public class Connection extends UnicastRemoteObject implements IConnection {
         if(currentClient == null)
             throw new InvalidCredentialsException();
 
+        if(!currentClient.getMail().equals(mail))
+            throw new InvalidCredentialsException();
+        System.out.println("Mail ok");
+
+        if(!currentClient.getPassword().equals(pwd))
+            throw new InvalidCredentialsException();
+        System.out.println("Password ok");
+
         System.out.println("Compte connecté : " + mail);
         return vodService;
     }
