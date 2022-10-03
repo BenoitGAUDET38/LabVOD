@@ -1,8 +1,6 @@
 package application;
 
-import CSV.CSVLogin;
 import CSV.CSVReaderWriter;
-import CSV.CSVRegister;
 import exceptions.InvalidCredentialsException;
 import exceptions.SignInFailed;
 import interfaces.IConnection;
@@ -21,7 +19,6 @@ public class Connection extends UnicastRemoteObject implements IConnection {
         super(port);
         vodService = new VODService(10002);
         clientList = new CSVReaderWriter().getClientInfo();
-        System.out.println(clientList);
     }
 
     public boolean signIn(String mail, String pwd) throws SignInFailed, RemoteException {

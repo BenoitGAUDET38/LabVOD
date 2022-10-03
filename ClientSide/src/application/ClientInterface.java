@@ -66,28 +66,16 @@ public class ClientInterface {
     }
 
     void chooseMovie(IVODService ivodService) throws RemoteException, InterruptedException {
-        Scanner scanner = new Scanner(System.in);
         List<MovieDesc> catalog = ivodService.viewCatalog();
         int nbMovies;
         while (true) {
-            System.out.println("\nAffichage du choix des films :");
-            nbMovies = 0;
-            for (MovieDesc movieDesc : catalog) {
-                nbMovies++;
-                System.out.println(nbMovies + " -> name : " + movieDesc.getMovieName() +
-                        "\n     isbn : " + movieDesc.getIsbn() +
-                        "\n     syno : " + movieDesc.getSynopsis());
-                if (movieDesc.isExtended) {
-                    MovieDescExtended movieDescExtended = (MovieDescExtended) movieDesc;
-                    System.out.println("     Affichage du trailer : ");
-                    movieDescExtended.displayTeaser();
-                }
-            }
+            nbMovies = displayCatalog(catalog);
 
             int choice = -1;
             do {
                 System.out.println("Choisir un film à regarder ou quitter l'application avec 0 : ");
                 try {
+                    Scanner scanner = new Scanner(System.in);
                     choice = Integer.parseInt(scanner.nextLine());
                     if (choice < 0 || choice > nbMovies)
                         System.out.println("Erreur : choix incorrect");
@@ -102,6 +90,24 @@ public class ClientInterface {
 
             watchMovie(ivodService, catalog.get(choice-1).getIsbn());
         }
+    }
+
+    int displayCatalog(List<MovieDesc> catalog) throws RemoteException, InterruptedException {
+        System.out.println("\nAffichage du choix des films :");
+        int nbMovies = 0;
+        for (MovieDesc movieDesc : catalog) {
+            nbMovies++;
+            System.out.println(nbMovies + " -> name : " + movieDesc.getMovieName() +
+                    "\n     isbn : " + movieDesc.getIsbn() +
+                    "\n     syno : " + movieDesc.getSynopsis());
+            if (movieDesc.isExtended) {
+                MovieDescExtended movieDescExtended = (MovieDescExtended) movieDesc;
+                System.out.println("     Affichage du trailer : ");
+                movieDescExtended.displayTeaser();
+            }
+        }
+
+        return nbMovies;
     }
 
     void watchMovie(IVODService ivodService, String movieIsbn) throws RemoteException, InterruptedException {
