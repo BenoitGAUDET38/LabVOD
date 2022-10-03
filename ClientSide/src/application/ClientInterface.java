@@ -6,7 +6,7 @@ import interfaces.IClientBox;
 import interfaces.IConnection;
 import interfaces.IVODService;
 
-import java.rmi.NotBoundException;
+import javax.security.auth.login.LoginException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -32,7 +32,7 @@ public class ClientInterface {
         chooseMovie(ivodService);
     }
 
-    IVODService connectionChoice(IConnection c) throws SignInFailed, RemoteException, InvalidCredentialsException {
+    IVODService connectionChoice(IConnection c) throws RemoteException {
         Scanner scanner = new Scanner(System.in);
         while (true) {
             System.out.println("Tapez le numéro associé à votre choix de connexion :" +
@@ -42,11 +42,21 @@ public class ClientInterface {
 
             switch (scanner.nextLine()) {
                 case "1" -> {
-                    IVODService ivodService = login(c);
-                    if (ivodService != null)
-                        return ivodService;
+                    try{
+                        IVODService ivodService = login(c);
+                        if (ivodService != null)
+                            return ivodService;
+                    }catch (InvalidCredentialsException le){
+                        System.out.println("Connection impossible avec les données renseignées.");
+                    }
                 }
-                case "2" -> signIn(c);
+                case "2" -> {
+                    try{
+                        signIn(c);
+                    }catch (SignInFailed sif){
+                        System.out.println("Inscription impossible avec les données renseignées.");
+                    }
+                }
                 case "3" -> {
                     return null;
                 }
