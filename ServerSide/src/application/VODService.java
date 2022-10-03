@@ -19,7 +19,9 @@ public class VODService extends UnicastRemoteObject implements IVODService {
         // fabrication des movies
         movieDescList = new ArrayList<>();
         movieDescList.add(new MovieDesc("Titanic", "001", "Le bateau coule"));
-        movieDescList.add(new MovieDesc("Sharknado", "002", "Film qui fait peur"));
+        movieDescList.add(new MovieDescExtended("Sharknado", "002", "Film qui fait peur",
+                new byte[][] {"teaser part 1".getBytes(StandardCharsets.UTF_8),
+                        "teaser part 2".getBytes(StandardCharsets.UTF_8)}));
         movieDescList.add(new MovieDesc("Interstellar", "003", "Il est aspiré dans unn trou noir"));
 
         movieList = new ArrayList<>();

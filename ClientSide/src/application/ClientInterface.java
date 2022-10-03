@@ -10,6 +10,7 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
@@ -66,6 +67,11 @@ public class ClientInterface {
                 System.out.println(nbMovies + " -> name : " + movieDesc.getMovieName() +
                         "\n     isbn : " + movieDesc.getIsbn() +
                         "\n     syno : " + movieDesc.getSynopsis());
+                if (movieDesc.isExtended) {
+                    MovieDescExtended movieDescExtended = (MovieDescExtended) movieDesc;
+                    System.out.println("     Affichage du trailer : ");
+                    movieDescExtended.displayTeaser();
+                }
             }
 
             int choice = -1;
