@@ -1,13 +1,11 @@
 package application;
 
-import interfaces.IMovieDesc;
-
 import java.io.Serializable;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 
-public class MovieDesc implements IMovieDesc, Serializable {
+public class MovieDesc implements Serializable {
     String movieName;
     String isbn;
     String synopsis;
@@ -27,17 +25,14 @@ public class MovieDesc implements IMovieDesc, Serializable {
         this.isExtended = isExtended;
     }
 
-    @Override
     public String getMovieName() throws RemoteException {
         return movieName;
     }
 
-    @Override
     public String getIsbn() throws RemoteException {
         return isbn;
     }
 
-    @Override
     public String getSynopsis() throws RemoteException {
         return synopsis;
     }
