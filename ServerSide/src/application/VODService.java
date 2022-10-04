@@ -41,6 +41,10 @@ public class VODService extends UnicastRemoteObject implements IVODService {
                 "third bloc of Interstellar".getBytes(StandardCharsets.UTF_8)}));
     }
 
+    /**
+     * Get the list of movies
+     * @return List<MovieDesc> catalog
+     */
     public List<MovieDesc> viewCatalog() {
         return movieDescList;
     }
@@ -51,7 +55,7 @@ public class VODService extends UnicastRemoteObject implements IVODService {
      *
      * @param isbn
      * @param box
-     * @return
+     * @return Bill
      * @throws RemoteException
      */
     public Bill playMovie(String isbn, IClientBox box) throws RemoteException {

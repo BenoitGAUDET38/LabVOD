@@ -19,7 +19,7 @@ public class MovieDescExtended extends MovieDesc implements Serializable {
     public void displayTeaser() throws InterruptedException {
         for (byte[] bloc : teaser) {
             System.out.println(Arrays.toString(bloc));
-            Thread.sleep(500);
+            Thread.sleep(100);
         }
     }
 }

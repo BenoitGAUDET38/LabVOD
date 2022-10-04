@@ -34,7 +34,7 @@ public class Connection extends UnicastRemoteObject implements IConnection {
      * otherwise -> throw new SignInFailed exception
      * @param mail
      * @param pwd
-     * @return
+     * @return boolean
      * @throws SignInFailed
      * @throws RemoteException
      */
@@ -61,7 +61,7 @@ public class Connection extends UnicastRemoteObject implements IConnection {
      *
      * @param mail
      * @param pwd
-     * @return
+     * @return IVODService
      * @throws RemoteException
      * @throws InvalidCredentialsException
      */
