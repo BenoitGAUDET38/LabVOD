@@ -12,6 +12,10 @@ public class MovieDescExtended extends MovieDesc implements Serializable {
         this.teaser = teaser;
     }
 
+    /**
+     * Display the teaser in the current interface
+     * @throws InterruptedException
+     */
     public void displayTeaser() throws InterruptedException {
         for (byte[] bloc : teaser) {
             System.out.println(Arrays.toString(bloc));

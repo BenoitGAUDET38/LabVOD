@@ -26,6 +26,11 @@ public class Movie {
         return content;
     }
 
+    /**
+     * Generate a bill link with the movie informations
+     * @return
+     * @throws RemoteException
+     */
     public Bill generateBill() throws RemoteException {
         return new Bill(movieDesc.getMovieName(), price);
     }

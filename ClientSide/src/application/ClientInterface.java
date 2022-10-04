@@ -21,6 +21,10 @@ public class ClientInterface {
         this.port = port;
     }
 
+    /**
+     * Start the user interface and the communication with the server
+     * @throws Exception
+     */
     public void start() throws Exception {
         Registry reg = LocateRegistry.getRegistry("localhost",2001);
         IConnection c = (IConnection) reg.lookup("MyConnection");
@@ -32,6 +36,13 @@ public class ClientInterface {
         chooseMovie(ivodService);
     }
 
+    /**
+     * Ask the connection action to do.
+     * After that redirect to the correct actions.
+     * @param c
+     * @return
+     * @throws RemoteException
+     */
     IVODService connectionChoice(IConnection c) throws RemoteException {
         Scanner scanner = new Scanner(System.in);
         while (true) {
@@ -65,6 +76,12 @@ public class ClientInterface {
         }
     }
 
+    /**
+     * Display the list of movie taken from the server and the user can make his choice
+     * @param ivodService
+     * @throws RemoteException
+     * @throws InterruptedException
+     */
     void chooseMovie(IVODService ivodService) throws RemoteException, InterruptedException {
         List<MovieDesc> catalog = ivodService.viewCatalog();
         int nbMovies;
@@ -92,6 +109,13 @@ public class ClientInterface {
         }
     }
 
+    /**
+     * Display a given catalog
+     * @param catalog
+     * @return
+     * @throws RemoteException
+     * @throws InterruptedException
+     */
     int displayCatalog(List<MovieDesc> catalog) throws RemoteException, InterruptedException {
         System.out.println("\nAffichage du choix des films :");
         int nbMovies = 0;
@@ -110,6 +134,14 @@ public class ClientInterface {
         return nbMovies;
     }
 
+    /**
+     * Actions to do when a user watch a movie.
+     * Wait the end of the movie before display the bill.
+     * @param ivodService
+     * @param movieIsbn
+     * @throws RemoteException
+     * @throws InterruptedException
+     */
     void watchMovie(IVODService ivodService, String movieIsbn) throws RemoteException, InterruptedException {
         IClientBox clientBox = new ClientBox(port);
         Bill bill = ivodService.playMovie(movieIsbn, clientBox);
@@ -123,6 +155,13 @@ public class ClientInterface {
         System.out.println("Facture reçu de " + bill.outrageousPrice + "€ pour le film " + bill.movieName + "...");
     }
 
+    /**
+     * Ask client information for login with the server
+     * @param c
+     * @return
+     * @throws InvalidCredentialsException
+     * @throws RemoteException
+     */
     IVODService login(IConnection c) throws InvalidCredentialsException, RemoteException {
         Scanner scanner = new Scanner(System.in);
         String mail;
@@ -160,6 +199,13 @@ public class ClientInterface {
         return ivodService;
     }
 
+    /**
+     * Ask client information for sign in with the server
+     * @param c
+     * @return
+     * @throws SignInFailed
+     * @throws RemoteException
+     */
     boolean signIn(IConnection c) throws SignInFailed, RemoteException {
         Scanner scanner = new Scanner(System.in);
         String mail;

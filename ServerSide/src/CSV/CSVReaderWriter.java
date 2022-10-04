@@ -16,6 +16,10 @@ public class CSVReaderWriter {
     String SPACE = " ";
     String LINE = "\n";
 
+    /**
+     * Get the scanner on the csv save file
+     * @return
+     */
     Scanner readData(){
         try{
             return new Scanner(new File(fileName));
@@ -25,6 +29,10 @@ public class CSVReaderWriter {
         return null;
     }
 
+    /**
+     * Retrieve all ClientInfo from the csv file and return the corresponding list of ClientInfo
+     * @return
+     */
     public List<ClientInfo> getClientInfo(){
         List<ClientInfo> clientInfoList = new ArrayList<>();
         Scanner credentials = readData();
@@ -38,10 +46,21 @@ public class CSVReaderWriter {
     }
 
 
+    /**
+     * Add a client in the csv file with the correct syntax
+     * @param mail
+     * @param pwd
+     * @return
+     */
     public boolean addClientInfo(String mail, String pwd) {
         return addData(mail + SPACE + pwd + LINE);
     }
 
+    /**
+     * Add the given string in the csv file
+     * @param text
+     * @return
+     */
     boolean addData(String text){
         try {
             new FileWriter(fileName, true).append(text).close();

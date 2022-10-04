@@ -14,6 +14,10 @@ public class ClientBox extends UnicastRemoteObject implements IClientBox {
         this.isStream = false;
     }
 
+    /**
+     * Display the chunk of the movie in client interface
+     * @param chunck
+     */
     public void stream(byte[] chunck) {
         System.out.println(Arrays.toString(chunck));
     }

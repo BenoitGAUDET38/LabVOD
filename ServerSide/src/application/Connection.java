@@ -15,12 +15,29 @@ public class Connection extends UnicastRemoteObject implements IConnection {
     List<ClientInfo> clientList;
     VODService vodService;
 
+    /**
+     * Read the clientList from Credentials.csv file and put it in a list
+     * @param port
+     * @throws RemoteException
+     */
     public Connection(int port) throws RemoteException {
         super(port);
         vodService = new VODService(10002);
         clientList = new CSVReaderWriter().getClientInfo();
     }
 
+    /**
+     * Check if the mail and pwd can be used for create a new account.
+     * If a new account is created, the informations are register in the csv file and in the client infos list
+     *
+     * true -> account created
+     * otherwise -> throw new SignInFailed exception
+     * @param mail
+     * @param pwd
+     * @return
+     * @throws SignInFailed
+     * @throws RemoteException
+     */
     public boolean signIn(String mail, String pwd) throws SignInFailed, RemoteException {
         System.out.println("* Tentative de création de compte de");
         System.out.println("Mail : " + mail + ", pwd : " + pwd);
@@ -37,6 +54,17 @@ public class Connection extends UnicastRemoteObject implements IConnection {
         return true;
     }
 
+    /**
+     * Check if the mail and pwd correspond to an existing account in the client infos list
+     * If correct info -> return rmi IVODService
+     * Else -> return null
+     *
+     * @param mail
+     * @param pwd
+     * @return
+     * @throws RemoteException
+     * @throws InvalidCredentialsException
+     */
     public IVODService login(String mail, String pwd) throws RemoteException, InvalidCredentialsException{
         System.out.println("* Tentative de connexion de");
         System.out.println("Mail : " + mail + ", pwd : " + pwd);
@@ -57,6 +85,11 @@ public class Connection extends UnicastRemoteObject implements IConnection {
         return vodService;
     }
 
+    /**
+     * Check if the mail correspond to a ClientInfo
+     * @param mail
+     * @return
+     */
     ClientInfo getClientInfoByMail(String mail) {
         for (ClientInfo clientInfo : clientList) {
             if (clientInfo.getMail().equals(mail))

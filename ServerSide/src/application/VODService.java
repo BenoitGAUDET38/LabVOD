@@ -13,6 +13,11 @@ public class VODService extends UnicastRemoteObject implements IVODService {
     private final List<MovieDesc> movieDescList;
     private final List<Movie> movieList;
 
+    /**
+     * Generate the movieList when created
+     * @param port
+     * @throws RemoteException
+     */
     protected VODService(int port) throws RemoteException {
         super(port);
 
@@ -40,6 +45,15 @@ public class VODService extends UnicastRemoteObject implements IVODService {
         return movieDescList;
     }
 
+    /**
+     * If the given isbn is correct, play the movie in clientBox with readMovieInThread().
+     * Return the bill of the movie.
+     *
+     * @param isbn
+     * @param box
+     * @return
+     * @throws RemoteException
+     */
     public Bill playMovie(String isbn, IClientBox box) throws RemoteException {
         Movie movie = getMovieByIsbn(isbn);
         // gestion cas d'erreur
@@ -50,6 +64,14 @@ public class VODService extends UnicastRemoteObject implements IVODService {
         return movie.generateBill();
     }
 
+    /**
+     * Indicated at the clientBox that the movie is currently streaming.
+     * After start a threat to read all the blocs of a movie.
+     * When the movie is finished, indication that to the clientBox.
+     *
+     * @param movie
+     * @param box
+     */
     void readMovieInThread(Movie movie, IClientBox box) {
         try {
             box.setIsStream(true);
@@ -73,6 +95,12 @@ public class VODService extends UnicastRemoteObject implements IVODService {
         thread.start();
     }
 
+    /**
+     * Get a movie in the list if corresponding to the given isbn
+     * @param isbn
+     * @return
+     * @throws RemoteException
+     */
     Movie getMovieByIsbn(String isbn) throws RemoteException {
         for (Movie movie : movieList) {
             if (movie.getMovieDesc().getIsbn().equals(isbn))
